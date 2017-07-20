@@ -1,0 +1,71 @@
+$nav-color: #bada55
+
+html
+  font-size: 10px
+
+.container
+  width: 90%
+
+.box
+  border: 2px solid black
+  font-size: 1.4rem
+  border-radius: 2px
+
+nav
+  background-color: $nav-color
+  margin-top: 1.5rem
+  margin-bottom: 1.5rem
+
+  .search-box
+    width: 30%
+    background-color: white !important
+    font-size: 100%
+
+  .right li a
+    font-size: 100%
+    text-shadow: 1px 1px 2px black
+
+.uiContainer--wrapper
+  padding-right: 0
+  // background-color: #FEFAC0
+
+  input
+    font-size: 2em
+
+.uiContainer__song-list
+  // height: 538px
+  padding-right: 0
+  overflow: scroll
+
+  .song-list
+    list-style-type: none
+
+    li
+      margin-bottom: 1rem
+
+  .song-list__item--data
+    padding-left: 0
+
+    li
+      display: inline-block
+      padding-right: 1.25rem
+      padding-left: 1.25rem
+      border-right: 2px solid #000
+
+      &:last-of-type
+        border-right: none
+      &:first-of-type
+        padding-left: 0
+
+.song-title
+  color: #785616
+  font-size: 2.5rem
+  margin-bottom: .5rem
+
+.delete-btn
+  background: grey
+  width: 80px
+  padding: 0
+
+.is-hidden
+  display: none !important

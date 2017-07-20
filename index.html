@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title></title>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="lib/node_modules/materialize-css/dist/css/materialize.min.css">
+  <link rel="stylesheet" type="text/css" href="lib/node_modules/rateyo/src/jquery.rateyo.css">
+  <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+  <div class="container">
+    <nav class="row box">
+      <div class="nav-wrapper">
+        <!-- replace this with a partial that only shows user stuff if user is true. Cool idea -->
+        <ul id="nav-mobile" class="left nav__links">
+          <li id="search-api"><a class="waves-effect waves-light btn">Search For Movies</a></li>
+          <li id="search-collection"><a class="waves-effect waves-light btn">Search My Movies</a></li>
+        </ul>
+        <input class="search-box" type="text" placeholder="title keyword">
+        <ul class="right nav__links">
+          <li id="logout" class="is-hidden user-link"><a href="#" title="">logout</a></li>
+          <li id="auth-btn" class="user-link"><a href="#" title="">login/register</a></li>
+        </ul>
+      </div>
+    </nav>
+    <div class="uiContainer row">
+      <section class="uiContainer--wrapper col s9">
+        <div class="uiContainer--movies"></div>
+        <div class="rateyo"></div>
+      </section>
+    </div>
+  </div>
+  <script src="lib/node_modules/rateyo/src/jquery.rateyo.js"></script>
+  <script type='text/javascript' src='dist/app.js'></script>
+</body>
+</html>

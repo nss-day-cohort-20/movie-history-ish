@@ -1,0 +1,6 @@
+lib/node_modules
+lib/.sass-cache
+lib/.sublime-gulp.cache
+dist/app.js
+css/
+javascripts/fb-getter.js
