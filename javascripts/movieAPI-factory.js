@@ -5,10 +5,10 @@ let $ = require('jquery');
 module.exports.getMovies = () => {
   return new Promise( (resolve, reject) => {
     $.ajax({
-      url: "https://api.themoviedb.org/3/search/movie?api_key=e272e7240171b6fbdd25ad132e5e70b1&query=Star+Wars"
+      url: "https://api.themoviedb.org/3/search/movie?api_key=e272e7240171b6fbdd25ad132e5e70b1&query=evil"
     }).done( (data) => {
       console.log("data", data);
-      let moviesArr = data.results.slice(0,11);
+      let moviesArr = data.results.slice(0,9);
       buildCastQueries(moviesArr)
       .then( (castArr) => {
         console.log("stuff", castArr);

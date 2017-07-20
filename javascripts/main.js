@@ -61,7 +61,7 @@ $('#search-api').click(function() {
 
 function outputMovies(moviesData) {
   let movieCards = templates.makeMovieList(moviesData);
-  $(".uiContainer--movies").html(movieCards);
+  $(".movie-list").html(movieCards);
 
   //   $(".rateyo").rateYo({
   //   rating: 3.6

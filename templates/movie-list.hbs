@@ -1,14 +1,18 @@
-<div class="uiContainer__movie-list box col s12">
-  {{#each movies}}
-    <div class="movie-list__item">
-      <span class="movie-title"}>{{original_title}}</span>
+{{#each movies}}
+  <div class="movie-list__item col s4">
+    <h3 class="movie-list__item--title"}>{{original_title}}</h3>
+    {{#if poster_path}}
       <img src="https://image.tmdb.org/t/p/w300/{{poster_path}}">
+    {{else}}
+      <img class="img-placeholder" src="no-poster.jpg">
+    {{/if}}
+    <div class="movie-list__item--panel">
       <h5 class="cast-list-${index}">Starring</h5>
-      <ul class="movie-list__cast--data">
+      <ul class="movie-list__item--cast-data">
         {{#each cast_list}}
           <li>{{name}}</li>
         {{/each}}
       </ul>
     </div>
-  {{/each}}
-</div>
+  </div>
+{{/each}}
