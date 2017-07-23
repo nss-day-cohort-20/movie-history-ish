@@ -1,7 +1,18 @@
 "use strict";
 
 let firebase = require("./firebaseConfig"),
-    provider = new firebase.auth.GoogleAuthProvider();
+    provider = new firebase.auth.GoogleAuthProvider(),
+    $ = require('jquery');
+
+firebase.auth().onAuthStateChanged( (user) => {
+  if(user) {
+    $('#logout').removeClass("is-hidden");
+    $('#auth-btn').addClass("is-hidden");
+  } else {
+    $('#logout').addClass("is-hidden");
+    $('#auth-btn').removeClass("is-hidden");
+  }
+});
 
 function logInGoogle() {
   console.log("wazzup, auth?");

@@ -1,18 +1,25 @@
 {{#each movies}}
-  <div class="movie-list__item col s4">
+  <div class="movie-list__item col l4">
     <h3 class="movie-list__item--title"}>{{original_title}}</h3>
+    <span class="delete-btn">X</span>
     {{#if poster_path}}
       <img src="https://image.tmdb.org/t/p/w300/{{poster_path}}">
     {{else}}
       <img class="img-placeholder" src="no-poster.jpg">
     {{/if}}
+    <h3 id="added-{{id}}"class="is-hidden">&#10004; Added to Watchlist</h3>
     <div class="movie-list__item--panel">
-      <h5 class="cast-list-${index}">Starring</h5>
-      <ul class="movie-list__item--cast-data">
-        {{#each cast_list}}
-          <li>{{name}}</li>
-        {{/each}}
-      </ul>
+      {{#if cast_list}}
+        <h5 class="cast-list-${index}">Starring</h5>
+        <ul class="movie-list__item--cast-data">
+          {{#each cast_list}}
+            <li>{{name}}</li>
+          {{/each}}
+        </ul>
+      {{/if}}
+      {{#unless uid}}
+        <h5 id="{{id}}" data-mov-data='{"id":{{id}}, "poster":"{{poster_path}}","title":"{{title}}"}' class="add-to-list">add to watchlist</h5>
+      {{/unless}}
     </div>
   </div>
 {{/each}}

@@ -2,11 +2,9 @@
 
 let $ = require('jquery'),
     // rateyo = require('rateyo'),
-    // db = require("./song-factory"),
-    api = require("./movieAPI-factory"),
-    movieController = require('./movie-ctrl'),
-    user = require('./user-factory'),
-    // firebase = require("./firebaseConfig")
+    apiCtrl = require("./api-controller"),
+    user = require('./user-controller'),
+    movieCtrl = require('./movie-ctrl'),
     templates = require('./template-builder'),
     $container = $('.uiContainer--songs');
 
@@ -14,49 +12,25 @@ $(document).ready(() => {
   console.log("rateyo");
 });
 // console.log("rateyo", $.rateYo());
-// movieController.attachEvents();
+movieCtrl.attachEvents();
 
 // User login
 $("#auth-btn").click(function() {
-  console.log("clicked auth");
-  user.logInGoogle()
-  .then(function(result) {
-    // This gives you a Google Access Token. You can use it to access the Google API.
-    var token = result.credential.accessToken;
-    // The signed-in user info.
-    var user = result.user;
-    console.log("logged in user", user.uid );
-    // songController.displayLoggedInView();
-  }).catch(function(error) {
-    // Handle Errors here.
-    var errorCode = error.code;
-    var errorMessage = error.message;
-    // The email of the user's account used.
-    var email = error.email;
-    // The firebase.auth.AuthCredential type that was used.
-    var credential = error.credential;
-    // ...
-    alert(errorMessage);
-  });
+  user.login();
 });
 
-// user logout
-$("#logout").click(function() {
-  user.logout().
-  then( () => {
-    console.log("user signed out");
-    // songController.displayLoggedOutView();
-  });
-});
-// end user stuff ****************************************************
-
-$('#search-api').click(function() {
+$('#search-btn').click(function() {
   console.log("search movies clicked");
   event.preventDefault();
-  api.getMovies() //searchInput needed
-  .then( (movies) => {
-    outputMovies(movies);
+  Promise.all([movieCtrl.fetchUserMovies(), apiCtrl.searchMovies($('.search-box').val())])
+  .then( (data) => {
+    console.log("completed results?", data);
+    outputMovies(data[1]);
+    $('.filter-btn').removeClass("disabled");
   });
+  // .then( (movies) => {
+
+  // });
 });
 
 function outputMovies(moviesData) {

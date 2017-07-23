@@ -1,5 +1,13 @@
 $nav-color: #bada55
 $background-color: rgba(186,218,85,.95)
+$faded-purple: rgba(238,130,238, .7)
+$full-purple: rgb(238,130,238)
+
+// This is the syntac for a mixin using .sass
+=colorTransition($speed)
+  -webkit-transition: background-color $speed linear
+  -ms-transition: background-color $speed linear
+  transition: background-color $speed linear
 
 html
   font-size: 10px
@@ -12,13 +20,18 @@ nav
   margin-top: 1.5rem
   margin-bottom: 1.5rem
 
+  #search-btn a
+    background-color: $full-purple
+
   .search-box
+    color: #000
     width: 30%
     background-color: white !important
-    font-size: 100%
+    font-size: 150%
+    padding-left: 10px
 
   .right li a
-    font-size: 100%
+    font-size: 150%
     text-shadow: 1px 1px 2px black
 
 
@@ -26,15 +39,32 @@ nav
   height: 480px
   position: relative
 
+  img
+    // width: 290px
+
+  .delete-btn
+    border-radius: 50%
+    font-size: 2.5rem
+    color: slategray
+    font-weight: bold
+    position: absolute
+    left: 285px
+    top: 1%
+    padding: 0 13px
+    border: 1px solid slategray
+    background-color: $full-purple
+
+    &:hover
+      cursor: pointer
+
   .img-placeholder
     width: 300px
 
   &--title
-    width: 300px
+    max-width: 300px
     position: absolute
     color: #000
     text-shadow: 1px 1px 2px #fff
-    // top: 0px
     padding: 10px
     background-color: $background-color
     font-family: Roboto
@@ -42,15 +72,32 @@ nav
   &--panel
     padding: 0 10px
     color: #000
-    text-shadow: 1px 1px #fff
+    text-shadow: .5px .5px #fff
     position: absolute
     bottom: 6%
     background-color: $background-color
-    width: 300px
+    border-top-right-radius: 5px
+    // width: 300px
+
+    .add-to-list
+      border-radius: 5px
+      background-color: $faded-purple
+      text-align: center
+      letter-spacing: .20em
+      padding: 0 10px
+
+      &.added
+        background-color: LightGray
+        color: gray
+
+      &:hover
+        cursor: pointer
+        background-color: $full-purple
+        +colorTransition(200ms)
 
   &--cast-data
     li
-      font-size: 1.5rem
+      font-size: 1.25rem
       margin: 0 2px
 
       &::before
@@ -58,6 +105,13 @@ nav
         font-size: 2em
         vertical-align: middle
         line-height: 0
+
+  h3[id^="added-"]
+    position: absolute
+    bottom: 50%
+    background: coral
+    width: 300px
+    text-align: center
 
 .is-hidden
   display: none !important

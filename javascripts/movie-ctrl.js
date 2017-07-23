@@ -1,16 +1,8 @@
-// 'use strict';
-// let $ = require('jquery');
-// let db = require('./myMovie-factory');
-// let templates = require('./template-builder');
-// let $container = $('.uiContainer--songs');
-// let firebase = require('./firebaseConfig');
-
-// firebase.auth().onAuthStateChanged( (user) => {
-//   console.log("auth state changed");
-//   if(user) {
-//     displayLoggedInView();
-//   }
-// });
+'use strict';
+let $ = require('jquery');
+let db = require('./myMovie-factory');
+let firebase = require('./firebaseConfig');
+let movieMaker = require('./movie-service');
 
 // // change view based on user state
 // function displayLoggedInView(){
@@ -25,49 +17,44 @@
 //   $container.html("");
 // }
 
-// // Helper function to build a song obj from form data.
-// function buildSongObj() {
-//     let songObj = {
-//     title: $("#form--title").val(),
-//     artist: $("#form--artist").val(),
-//     album: $("#form--album").val(),
-//     year: $("#form--year").val()
-//   };
-//   return songObj;
-// }
+// // Helper function to build a movie obj to send to fb.
+function buildUserMovie(movieData) {
+  console.log("movie data passed to build", movieData);
+  let newWatchlistItem = {
+    movie_id: movieData.id,
+    movie_poster: movieData.poster,
+    movie_title: movieData.title,
+    uid: firebase.auth().currentUser.uid,
+    rating: 0,
+    watched: false
+  };
+  return newWatchlistItem;
+}
 
-// // function chooseLoadMethod() {
-// //   if(firebase.auth().currentUser) {
-// //     return db.getUserSongs();
-// //   } else {
-// //     return db.getSongs();
-// //   }
-// // }
+module.exports.fetchUserMovies = () => {
+  return new Promise( (resolve, reject) => {
+    console.log("loading user's movies");
+    db.getMovies()
+    .then(function(movieData) {
+      let resultsArr = [];
+      let idArr = Object.keys(movieData);
+      console.log("idArr", idArr);
+      idArr.forEach(function(key) {
+        movieData[key].id = key;
+        resultsArr.push(movieData[key]);
+      });
+      movieMaker.buildCastQueries(resultsArr)
+      .then( (castArr) => {
+        console.log("user castArr", castArr);
+        let amendedMovies = movieMaker.addCastList(resultsArr, castArr);
+        console.log("amended user list", amendedMovies);
+        resolve(amendedMovies);
+      });
+    });
+  });
+};
 
-// function loadMoviesToDOM() {
-//   console.log("loading movies");
-//   // $container.html("");
-//   chooseLoadMethod()
-//   .then(function(songData) {
-//     console.log("raw data", songData);
-//     var idArr = Object.keys(songData);
-//     console.log("idArr", idArr);
-//     idArr.forEach(function(key) {
-//       songData[key].id = key;
-//     });
-//     console.log("songs objects with id added", songData);
-//     let songList = templates.makeSongList(songData);
-//     $container.html(songList);
-//   });
-// }
-
-// function attachEvents() {
-//   // Load the new song form
-//   $("#add-song").click(function() {
-//     console.log("clicked add song");
-//     var songForm = templates.buildSongForm();
-//     $container.html(songForm);
-//   });
+module.exports.attachEvents = () => {
 
 //   // display song list
 //   $('#see-list').click(loadSongsToDOM);
@@ -75,15 +62,23 @@
 //   // display user's list
 //   $('#see-user-list').click(loadSongsToDOM);
 
-//   // Send newSong data to db then reload DOM with updated song data
-//   $(document).on("click", ".save_new_btn", function() {
-//     let songObj = buildSongObj();
-//     db.addSong(songObj)
-//     .then(function(SongId){
-//       console.log("song saved", SongId);
-//       loadSongsToDOM();
-//     });
-//   });
+  // Send newMovie data to db
+  $(document).on("click", ".add-to-list", function() {
+    let movId = $(this).attr("id");
+    // pull movie info from the data-attribute on the 'add' btn
+    let movData = $(this).data("mov-data");
+    // build a new obj to save to FB
+    let newMovie = buildUserMovie(movData);
+    console.log("newMovie", newMovie);
+    db.addUserMovie(newMovie)
+    .then( (movie) => {
+      console.log("movie saved", movie);
+      // show banner indicating movie added to watchlist
+      console.log("banner?", $(`#added-${movId}`) );
+      $(`#added-${movId}`).removeClass("is-hidden");
+      $(this).addClass("added");
+    });
+  });
 
 // // Load and populate form for editing a song
 //   $(document).on("click", ".edit-btn", function() {
@@ -117,6 +112,6 @@
 //       loadSongsToDOM();
 //     });
 //   });
-// }
+};
 
 // module.exports = {loadSongsToDOM, attachEvents, displayLoggedInView, displayLoggedOutView};
