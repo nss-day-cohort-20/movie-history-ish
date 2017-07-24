@@ -1,6 +1,6 @@
 // interactions with the movie API
 'use strict';
-let $ = require('jquery');
+// let $ = require('jquery');
 
 module.exports.getMovies = (userInput) => {
   return new Promise( (resolve, reject) => {

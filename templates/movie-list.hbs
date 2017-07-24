@@ -22,7 +22,8 @@
       {{/unless}}
     </div>
     {{#if uid}}
-      <div class="rating">ratings go here</div>
+      {{!-- pass this template's context to the partial via 'this' --}}
+      <div class="rating">{{> rating this}}</div>
     {{/if}}
   </div>
 {{/each}}

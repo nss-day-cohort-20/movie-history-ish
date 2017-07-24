@@ -1,10 +1,9 @@
 "use strict";
 
-let $ = require('jquery'),
-    firebase = require('./firebaseConfig'),
+// let $ = require('jquery'),
+let firebase = require('./firebaseConfig'),
     movieMaker = require('./movie-service'),
     fbURL = "https://movie-hist-d20.firebaseio.com";
-
 
 // ****************************************
 // DB interaction using Firebase REST API
@@ -50,6 +49,34 @@ module.exports.addMovie = (movieObj) => {
   });
 };
 
+module.exports.saveRating = (id, rating) => {
+  return new Promise( (resolve, reject) => {
+    getMovie(id)
+    .then( (movie) => {
+      // ES6 object shorthand: same as {rating: rating}
+      // The new rating number is what we want to update, so editMovie will
+      // do a "PATCH" to change just that property
+      console.log("movie to update rating", movie);
+      editMovie({rating}, id)
+      .then( (data) => {
+        console.log("rating updated", data );
+      });
+    })
+    .catch( (err) => {
+      reject(err);
+    });
+  });
+};
+
+function getMovie(id) {
+  return new Promise( ( resolve, reject) => {
+    $.ajax({
+      url: `${fbURL}/watchlist/${id}.json`
+    }).done( (movieData) => {
+      resolve(movieData);
+    });
+  });
+}
 // function deleteSong(songId) {
 //   console.log("song id", songId );
 //   if(songId) {
@@ -79,18 +106,17 @@ module.exports.addMovie = (movieObj) => {
 //   });
 // }
 
-// function editSong(songFormObj, songId) {
-//   console.log("songId in EditSong", songId );
-//   return new Promise( (resolve, reject) => {
-//     $.ajax({
-//       url: `${fbURL}/songs/${songId}.json`,
-//       type: "PUT",
-//       data: JSON.stringify(songFormObj)
-//     }).done( (data) => {
-//       resolve(data);
-//     });
-//   });
-// }
+function editMovie(movie, watchlistId) {
+  return new Promise( (resolve, reject) => {
+    $.ajax({
+      url: `${fbURL}/watchlist/${watchlistId}.json`,
+      type: "PATCH",
+      data: JSON.stringify(movie)
+    }).done( (data) => {
+      resolve(data);
+    });
+  });
+}
 
 // module.exports = {
 //   getSongs,

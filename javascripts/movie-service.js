@@ -1,6 +1,6 @@
 'use strict';
 
-let $ = require('jquery');
+// let $ = require('jquery');
 
 function getCastDetails(queryUrl) {
   console.log("query URL", queryUrl);

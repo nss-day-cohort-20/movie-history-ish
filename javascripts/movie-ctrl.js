@@ -1,5 +1,5 @@
 'use strict';
-let $ = require('jquery');
+// let $ = require('jquery');
 let db = require('./myMovie-factory');
 let firebase = require('./firebaseConfig');
 let movieMaker = require('./movie-service');
@@ -44,9 +44,16 @@ function prepMovies(initResults, searchTerm) {
   });
   // make array containing only titles that contain the user's search term
   let filteredResults = moddedArr.filter( (movie) => {
-    return movie.title.includes(searchTerm);
+    return movie.title.toLowerCase().includes(searchTerm.toLowerCase());
   });
   return filteredResults;
+}
+
+function rateMovie(id, rating) {
+  db.saveRating(id, rating)
+  .then( (data) => {
+    console.log("data", data);
+  });
 }
 
 module.exports.fetchUserMovies = (searchTerm) => {
@@ -68,12 +75,6 @@ module.exports.fetchUserMovies = (searchTerm) => {
 
 module.exports.attachEvents = () => {
 
-//   // display song list
-//   $('#see-list').click(loadSongsToDOM);
-
-//   // display user's list
-//   $('#see-user-list').click(loadSongsToDOM);
-
   // Send newMovie data to db
   $(document).on("click", ".add-to-list", function() {
     let movId = $(this).attr("id");
@@ -81,28 +82,26 @@ module.exports.attachEvents = () => {
     let movData = $(this).data("mov-data");
     // build a new obj to save to FB
     let newMovie = buildUserMovie(movData);
-    console.log("newMovie", newMovie);
+    // console.log("newMovie", newMovie);
     db.addUserMovie(newMovie)
     .then( (movie) => {
-      console.log("movie saved", movie);
+      // console.log("movie saved", movie);
       // show banner indicating movie added to watchlist
-      console.log("banner?", $(`#added-${movId}`) );
+      // console.log("banner?", $(`#added-${movId}`) );
       $(`#added-${movId}`).removeClass("is-hidden");
       $(this).addClass("added");
     });
   });
 
-// // Load and populate form for editing a song
-//   $(document).on("click", ".edit-btn", function() {
-//     console.log("edit clicked");
-//     let songId = $(this).data("edit-id");
-//     db.getSong(songId)
-//     .then(function(song) {
-//           song.id = songId;
-//           let editForm = templates.buildSongForm(song);
-//           $container.html(editForm);
-//       });
-//   });
+  // trigger user star rating
+  $(document).on("click", ".active", function() {
+    console.log("rating clicked");
+    let fbId = $(this).parents(".rating-wrapper").attr("id");
+    // The plugin adds a clas of "active" to every star at and below where you click
+    let rating = $(".active").length;
+    rateMovie(fbId, rating);
+  });
+
 
 // //Save edited song to FB then reload DOM with updated song data
 //   $(document).on("click", ".save_edit_btn", function() {

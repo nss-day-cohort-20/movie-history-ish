@@ -1,8 +1,8 @@
 "use strict";
 
 let firebase = require("./firebaseConfig"),
-    provider = new firebase.auth.GoogleAuthProvider(),
-    $ = require('jquery');
+    provider = new firebase.auth.GoogleAuthProvider();
+    // $ = require('jquery');
 
 firebase.auth().onAuthStateChanged( (user) => {
   if(user) {

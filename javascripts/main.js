@@ -1,17 +1,11 @@
 "use strict";
 
-let $ = require('jquery'),
-    // rateyo = require('rateyo'),
-    apiCtrl = require("./api-controller"),
+// let $ = require('jquery'),
+let apiCtrl = require("./api-controller"),
     user = require('./user-controller'),
     movieCtrl = require('./movie-ctrl'),
-    templates = require('./template-builder'),
-    $container = $('.uiContainer--songs');
+    templates = require('./template-builder');
 
-$(document).ready(() => {
-  console.log("rateyo");
-});
-// console.log("rateyo", $.rateYo());
 movieCtrl.attachEvents();
 
 // User login
@@ -34,17 +28,13 @@ $('#search-btn').click(function() {
     outputMovies(allMovies);
     $('.filter-btn').removeClass("disabled");
   });
-  // .then( (movies) => {
-
-  // });
 });
 
 function outputMovies(moviesData) {
   console.log("allMovies", moviesData );
   let movieCards = templates.makeMovieList(moviesData);
   $(".movie-list").html(movieCards);
-
-  //   $(".rateyo").rateYo({
-  //   rating: 3.6
-  // });
+  $(".rating").starRating({
+        minus: true // step minus button
+    });
 }

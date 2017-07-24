@@ -1,6 +1,6 @@
 'use strict';
 
-let $ = require('jquery');
+// let $ = require('jquery');
 let api = require('./movieAPI-factory');
 let movieMaker = require('./movie-service');
 
