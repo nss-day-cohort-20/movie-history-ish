@@ -6,6 +6,7 @@ let apiCtrl = require("./api-controller"),
     movieCtrl = require('./movie-ctrl'),
     templates = require('./template-builder');
 
+// activate movie card-related event listeners
 movieCtrl.attachEvents();
 
 // User login
@@ -37,4 +38,12 @@ function outputMovies(moviesData) {
   $(".rating").starRating({
         minus: true // step minus button
     });
+  console.log($(".rating-wrapper"));
+  // Loop through all the cards with rating wrappers and set the right number
+  // of stars to "active" based on the rating from FB
+  $(".rating-wrapper").each( function(i, element) {
+    let ratingNum = parseInt($(this).data("rating"));
+    let $stars = ($(this).find("li"));
+    $stars.slice(0, ratingNum).addClass("active");
+  });
 }

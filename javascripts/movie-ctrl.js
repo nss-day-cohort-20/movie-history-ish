@@ -4,19 +4,6 @@ let db = require('./myMovie-factory');
 let firebase = require('./firebaseConfig');
 let movieMaker = require('./movie-service');
 
-// // change view based on user state
-// function displayLoggedInView(){
-//   loadSongsToDOM();
-//   $("#see-user-list, #logout").removeClass("is-hidden");
-//   $('#auth-btn').addClass("is-hidden");
-// }
-
-// function displayLoggedOutView() {
-//   $("#see-user-list, #logout").addClass("is-hidden");
-//   $('#auth-btn').removeClass("is-hidden");
-//   $container.html("");
-// }
-
 // // Helper function to build a movie obj to send to fb.
 function buildUserMovie(movieData) {
   console.log("movie data passed to build", movieData);
@@ -97,8 +84,8 @@ module.exports.attachEvents = () => {
   $(document).on("click", ".active", function() {
     console.log("rating clicked");
     let fbId = $(this).parents(".rating-wrapper").attr("id");
-    // The plugin adds a clas of "active" to every star at and below where you click
-    let rating = $(".active").length;
+    // The plugin adds a data-val attr to each set of stars when you click to rate
+    let rating = $(this).parents(".rating-wrapper").data("val");
     rateMovie(fbId, rating);
   });
 
