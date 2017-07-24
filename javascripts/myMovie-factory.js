@@ -16,7 +16,7 @@ module.exports.getMovies = () => {
   let currentUser = firebase.auth().currentUser.uid;
   return new Promise( ( resolve, reject) => {
     $.ajax({
-      url: `${fbURL}/movies.json?orderBy="uid"&equalTo="${currentUser}"`//<.json is important!
+      url: `${fbURL}/watchlist.json?orderBy="uid"&equalTo="${currentUser}"`//<.json is important!
     }).done( (movieData) => {
       console.log("my movieData", movieData );
       resolve(movieData);

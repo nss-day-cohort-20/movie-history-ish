@@ -22,10 +22,16 @@ $("#auth-btn").click(function() {
 $('#search-btn').click(function() {
   console.log("search movies clicked");
   event.preventDefault();
-  Promise.all([movieCtrl.fetchUserMovies(), apiCtrl.searchMovies($('.search-box').val())])
+  let searchVal = $('.search-box').val();
+  Promise.all([movieCtrl.fetchUserMovies(searchVal), apiCtrl.searchMovies(searchVal)])
   .then( (data) => {
-    console.log("completed results?", data);
-    outputMovies(data[1]);
+    console.log("completed results?", data); //logs a nested array
+    let watchlist = data[0].uid ? data[0] : data[1];
+    let filteredWatchlist = null;
+    // combine FB and API results then send to function that adds to DOM
+    // http://www.jstips.co/en/javascript/flattening-multidimensional-arrays-in-javascript/
+    let allMovies = [].concat(...data);
+    outputMovies(allMovies);
     $('.filter-btn').removeClass("disabled");
   });
   // .then( (movies) => {
@@ -34,6 +40,7 @@ $('#search-btn').click(function() {
 });
 
 function outputMovies(moviesData) {
+  console.log("allMovies", moviesData );
   let movieCards = templates.makeMovieList(moviesData);
   $(".movie-list").html(movieCards);
 

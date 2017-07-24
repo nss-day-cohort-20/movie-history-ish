@@ -22,8 +22,8 @@ function buildUserMovie(movieData) {
   console.log("movie data passed to build", movieData);
   let newWatchlistItem = {
     movie_id: movieData.id,
-    movie_poster: movieData.poster,
-    movie_title: movieData.title,
+    poster_path: movieData.poster,
+    title: movieData.title,
     uid: firebase.auth().currentUser.uid,
     rating: 0,
     watched: false
@@ -31,22 +31,34 @@ function buildUserMovie(movieData) {
   return newWatchlistItem;
 }
 
-module.exports.fetchUserMovies = () => {
+// helper function to add keys to each movie and keep only movies that match search term
+function prepMovies(initResults, searchTerm) {
+  let moddedArr = [];
+  // Make array of the initResults object's keys
+  let idArr = Object.keys(initResults);
+  console.log("idArr", idArr);
+  // loop through array of keys and add each one to its related object as an id property
+  idArr.forEach(function(key) {
+    initResults[key].id = key;
+    moddedArr.push(initResults[key]);
+  });
+  // make array containing only titles that contain the user's search term
+  let filteredResults = moddedArr.filter( (movie) => {
+    return movie.title.includes(searchTerm);
+  });
+  return filteredResults;
+}
+
+module.exports.fetchUserMovies = (searchTerm) => {
   return new Promise( (resolve, reject) => {
     console.log("loading user's movies");
     db.getMovies()
     .then(function(movieData) {
-      let resultsArr = [];
-      let idArr = Object.keys(movieData);
-      console.log("idArr", idArr);
-      idArr.forEach(function(key) {
-        movieData[key].id = key;
-        resultsArr.push(movieData[key]);
-      });
-      movieMaker.buildCastQueries(resultsArr)
+      let filteredMovies = prepMovies(movieData, searchTerm);
+      movieMaker.buildCastQueries(filteredMovies)
       .then( (castArr) => {
         console.log("user castArr", castArr);
-        let amendedMovies = movieMaker.addCastList(resultsArr, castArr);
+        let amendedMovies = movieMaker.addCastList(filteredMovies, castArr);
         console.log("amended user list", amendedMovies);
         resolve(amendedMovies);
       });

@@ -1,6 +1,6 @@
 {{#each movies}}
   <div class="movie-list__item col l4">
-    <h3 class="movie-list__item--title"}>{{original_title}}</h3>
+    <h3 class="movie-list__item--title"}>{{title}}</h3>
     <span class="delete-btn">X</span>
     {{#if poster_path}}
       <img src="https://image.tmdb.org/t/p/w300/{{poster_path}}">
@@ -21,5 +21,8 @@
         <h5 id="{{id}}" data-mov-data='{"id":{{id}}, "poster":"{{poster_path}}","title":"{{title}}"}' class="add-to-list">add to watchlist</h5>
       {{/unless}}
     </div>
+    {{#if uid}}
+      <div class="rating">ratings go here</div>
+    {{/if}}
   </div>
 {{/each}}
