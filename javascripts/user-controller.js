@@ -3,7 +3,20 @@
 // let $ = require('jquery');
 let userFactory = require('./user-factory');
 
-module.exports.login = () => {
+// User login
+$("#auth-btn").click(function() {
+  login();
+});
+
+// user logout
+$("#logout").click(function() {
+  userFactory.logout().
+  then( () => {
+    console.log("user signed out");
+  });
+});
+
+function login() {
   userFactory.logInGoogle()
   .then(function(result) {
     // This gives you a Google Access Token. You can use it to access the Google API.
@@ -22,12 +35,6 @@ module.exports.login = () => {
     // ...
     alert(errorMessage);
   });
-};
+}
 
-// user logout
-$("#logout").click(function() {
-  userFactory.logout().
-  then( () => {
-    console.log("user signed out");
-  });
-});
+

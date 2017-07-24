@@ -1,49 +1,24 @@
 "use strict";
 
+// Pulling in jQuery via a CDN because of the star-rating plugin I'm using.
+// Not happy about it, so a refactor would include dumping the plugin and
+// rolling my own star-rating logic
 // let $ = require('jquery'),
-let apiCtrl = require("./api-controller"),
-    user = require('./user-controller'),
-    movieCtrl = require('./movie-ctrl'),
-    templates = require('./template-builder');
+let movieCtrl = require('./movie-ctrl');
 
-// activate movie card-related event listeners
+// You can 'activate' a module just by calling 'require()' as long as there are no
+// properties you're exporting from that module. These modules only contain
+// listeners and helper functions that the listeners call, so we don't need to import
+// anything to run inside this module. But requiring them all here, from a central spot, allows Browserify
+// to know where to start creating the chain of dependencies.
+require('./search');
+require('./user-controller');
+
+// Another way to write this file is to have each module's event listeners wrapped in
+// a single function that activates all of them when that function is called. It's a little
+// less weird than just calling 'require()' on a module. It's your choice
 movieCtrl.attachEvents();
 
-// User login
-$("#auth-btn").click(function() {
-  user.login();
-});
 
-$('#search-btn').click(function() {
-  console.log("search movies clicked");
-  event.preventDefault();
-  let searchVal = $('.search-box').val();
-  Promise.all([movieCtrl.fetchUserMovies(searchVal), apiCtrl.searchMovies(searchVal)])
-  .then( (data) => {
-    console.log("completed results?", data); //logs a nested array
-    let watchlist = data[0].uid ? data[0] : data[1];
-    let filteredWatchlist = null;
-    // combine FB and API results then send to function that adds to DOM
-    // http://www.jstips.co/en/javascript/flattening-multidimensional-arrays-in-javascript/
-    let allMovies = [].concat(...data);
-    outputMovies(allMovies);
-    $('.filter-btn').removeClass("disabled");
-  });
-});
 
-function outputMovies(moviesData) {
-  console.log("allMovies", moviesData );
-  let movieCards = templates.makeMovieList(moviesData);
-  $(".movie-list").html(movieCards);
-  $(".rating").starRating({
-        minus: true // step minus button
-    });
-  console.log($(".rating-wrapper"));
-  // Loop through all the cards with rating wrappers and set the right number
-  // of stars to "active" based on the rating from FB
-  $(".rating-wrapper").each( function(i, element) {
-    let ratingNum = parseInt($(this).data("rating"));
-    let $stars = ($(this).find("li"));
-    $stars.slice(0, ratingNum).addClass("active");
-  });
-}
+

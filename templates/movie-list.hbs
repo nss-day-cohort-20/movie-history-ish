@@ -1,5 +1,5 @@
 {{#each movies}}
-  <div class="movie-list__item col l4">
+  <div class="movie-list__item col l4 {{#if rating}}watched{{else if uid}}unwatched{{else}}untracked{{/if}}">
     <h3 class="movie-list__item--title"}>{{title}}</h3>
     <span class="delete-btn">X</span>
     {{#if poster_path}}

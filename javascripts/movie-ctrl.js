@@ -45,15 +45,15 @@ function rateMovie(id, rating) {
 
 module.exports.fetchUserMovies = (searchTerm) => {
   return new Promise( (resolve, reject) => {
-    console.log("loading user's movies");
+    // console.log("loading user's movies");
     db.getMovies()
     .then(function(movieData) {
       let filteredMovies = prepMovies(movieData, searchTerm);
       movieMaker.buildCastQueries(filteredMovies)
       .then( (castArr) => {
-        console.log("user castArr", castArr);
+        // console.log("user castArr", castArr);
         let amendedMovies = movieMaker.addCastList(filteredMovies, castArr);
-        console.log("amended user list", amendedMovies);
+        // console.log("amended user list", amendedMovies);
         resolve(amendedMovies);
       });
     });
@@ -61,7 +61,6 @@ module.exports.fetchUserMovies = (searchTerm) => {
 };
 
 module.exports.attachEvents = () => {
-
   // Send newMovie data to db
   $(document).on("click", ".add-to-list", function() {
     let movId = $(this).attr("id");
