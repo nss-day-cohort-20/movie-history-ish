@@ -1,5 +1,16 @@
 'use strict';
 
+// This doesn't get used any more, but since I showed it in class, here it is so you can try
+// something similar the next time you need to set a value based on an if/else --
+                // let watchlist = data[0].uid ? data[0] : data[1];
+// This is the same as the code below`
+// let watchlist;
+// if(data[0].uid) {
+//   watchlist = data[0]
+// } else {
+//    watchlist = data[1]
+// }
+
 let apiCtrl = require("./api-controller");
 let movieCtrl = require('./movie-ctrl');
 let templates = require('./template-builder');
@@ -7,17 +18,13 @@ let templates = require('./template-builder');
 // This method allows us to remove duplicate objects from an array based on a shared property
 let _uniqBy = require('lodash/uniqBy');
 
-// console.log("_uniqBy", _uniqBy);
-
 $('#search-btn').click(function() {
   console.log("search movies clicked");
   event.preventDefault();
   let searchVal = $('.search-box').val();
   Promise.all([movieCtrl.fetchUserMovies(searchVal), apiCtrl.searchMovies(searchVal)])
-  .then( (data) => {
+  .then( ([data]) => {
     console.log("completed results?", data); //logs a nested array
-    let watchlist = data[0].uid ? data[0] : data[1];
-    let filteredWatchlist = null;
     // combine FB and API results then send to function that adds to DOM
     // http://www.jstips.co/en/javascript/flattening-multidimensional-arrays-in-javascript/
     let allMovies = [].concat(...data);

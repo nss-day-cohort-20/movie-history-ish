@@ -18,7 +18,3 @@ require('./user-controller');
 // a single function that activates all of them when that function is called. It's a little
 // less weird than just calling 'require()' on a module. It's your choice
 movieCtrl.attachEvents();
-
-
-
-
